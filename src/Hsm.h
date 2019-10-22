@@ -17,6 +17,12 @@ typedef enum HsmEvent {
     HSM_EVENT_FIRST_APPLICATION,
 } HsmEvent;
 
+typedef enum HsmEventResult {
+    HSM_EVENT_RESULT_IGNORED = 0,
+    HSM_EVENT_RESULT_CONSUMED,
+    HSM_EVENT_RESULT_DEFERRED,
+} HsmEventResult;
+
 typedef enum HsmResult {
     HSM_RESULT_EVENT_CONSUMED,
     HSM_RESULT_DO_ERROR_FIRST = 100,
