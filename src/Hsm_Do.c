@@ -2,7 +2,7 @@
 #include "Hsm.h"
 #include "Hsm_IsStateActive.h"
 #include "Hsm_ProcessEvent.h"
-#include "Hsm_PerformTransit.h"
+#include "Hsm_ProcessTransit.h"
 
 HsmResult Hsm_Do(Hsm *state_machine, HsmEvent *event)
 {
@@ -19,7 +19,7 @@ HsmResult Hsm_Do(Hsm *state_machine, HsmEvent *event)
     }
     else if (!Hsm_IsStateActive(state_machine))
     {
-        rval = Hsm_PerformTransit(state_machine,&transit);
+        rval = Hsm_ProcessTransit(state_machine,&transit);
     }
 
     if (!rval)

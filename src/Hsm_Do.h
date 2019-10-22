@@ -22,7 +22,7 @@
  *  \test an inactive state machine is initialized after check and then passed the event
  *  \test a null state_machine returns an error
  *  \test a null event returns an error
- *  \test a PerformTransit error returns the error and doesn't call ProcessEvent
+ *  \test a ProcessTransit error returns the error and doesn't call ProcessEvent
  **************************************************************************************************/
 HsmResult Hsm_Do(Hsm *state_machine, HsmEvent *event);
 

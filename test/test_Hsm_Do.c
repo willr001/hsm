@@ -1,7 +1,7 @@
 #include "unity.h"
 #include "Hsm_Do.h"
 #include "mock_Hsm_IsStateActive.h"
-#include "mock_Hsm_PerformTransit.h"
+#include "mock_Hsm_ProcessTransit.h"
 #include "mock_Hsm_ProcessEvent.h"
 #include "string.h"
 
@@ -37,11 +37,11 @@ void test_Hsm_Do_ActiveStateMachineJustProcessesEvent(void)
 /*
  *  \test an inactive state machine is initialized after check and then passed the event
  */
-void test_Hsm_Do_InactiveStateMachineCallsPerformTransit(void)
+void test_Hsm_Do_InactiveStateMachineCallsProcessTransit(void)
 {
     unsigned returnVal = 1;
     Hsm_IsStateActive_ExpectAndReturn(&m_hsm,false);
-    Hsm_PerformTransit_ExpectAndReturn(&m_hsm,&m_transit,0);
+    Hsm_ProcessTransit_ExpectAndReturn(&m_hsm,&m_transit,0);
     Hsm_ProcessEvent_ExpectAndReturn(&m_hsm,&m_event,returnVal);
     TEST_ASSERT_EQUAL(returnVal,Hsm_Do(&m_hsm,&m_event));
 }
@@ -63,13 +63,13 @@ void test_Hsm_Do_NullEventReturnsError(void)
 }
 
 /*
- *  \test a PerformTransit error returns the error and doesn't call ProcessEvent
+ *  \test a ProcessTransit error returns the error and doesn't call ProcessEvent
  */
-void test_Hsm_PerformTransitErrorReturns(void)
+void test_Hsm_ProcessTransitErrorReturns(void)
 {
     unsigned returnVal = 42;
     Hsm_IsStateActive_ExpectAndReturn(&m_hsm,false);
-    Hsm_PerformTransit_ExpectAndReturn(&m_hsm,&m_transit,returnVal);
+    Hsm_ProcessTransit_ExpectAndReturn(&m_hsm,&m_transit,returnVal);
     TEST_ASSERT_EQUAL(returnVal,Hsm_Do(&m_hsm,&m_event));
 }
 

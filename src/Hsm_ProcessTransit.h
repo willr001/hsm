@@ -3,6 +3,6 @@
 
 #include "Hsm.h"
 
-HsmResult Hsm_PerformTransit(Hsm *state_machine, HsmTransit *transit);
+HsmResult Hsm_ProcessTransit(Hsm *state_machine, HsmTransit *transit);
 
 #endif // _HSM_PERFORMTRANSIT_H
