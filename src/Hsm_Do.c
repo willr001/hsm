@@ -7,7 +7,7 @@
 HsmResult Hsm_Do(Hsm *state_machine, HsmEvent *event)
 {
     HsmResult rval = 0;
-    HsmTransit transit = { .target = state_machine };
+    HsmTransit initial_transit = { .target = state_machine };
 
     if (!state_machine)
     {
@@ -17,14 +17,17 @@ HsmResult Hsm_Do(Hsm *state_machine, HsmEvent *event)
     {
         rval = HSM_RESULT_DO_ERROR_NULL_EVENT_POINTER;
     }
-    else if (!Hsm_IsStateActive(state_machine))
+    else 
     {
-        rval = Hsm_ProcessTransit(state_machine,&transit);
-    }
+        if (!Hsm_IsStateActive(state_machine))
+        {
+            rval = Hsm_ProcessTransit(state_machine,&initial_transit);
+        }
 
-    if (!rval)
-    {
-        rval = Hsm_ProcessEvent(state_machine,event);
+        if (!rval)
+        {
+            rval = Hsm_ProcessEvent(state_machine,event);
+        }
     }
 
     return rval;

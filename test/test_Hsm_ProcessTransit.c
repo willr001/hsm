@@ -2,32 +2,45 @@
 #include "Hsm.h"
 #include "Hsm_ProcessTransit.h"
 #include "mock_Hsm_DoTransit.h"
+#include <string.h>
 
 static HsmHandlerReturn m_handler(Hsm *self, HsmEvent *event, HsmTransit *transit);
 
 static unsigned m_hitcount;
 static unsigned m_loop;
-static Hsm m_hsm = { .handler = &m_handler };
-static Hsm m_hsm2 = { .active = &m_hsm };
-static HsmTransit m_transit = { .target = &m_hsm };
-static HsmTransit m_transit2 = { .target = &m_hsm2 };
+static Hsm m_hsm;
+static Hsm m_hsm2;
+static HsmTransit m_transit;
+static HsmTransit m_transit2;
 
 static HsmHandlerReturn m_handler(Hsm *self, HsmEvent *event, HsmTransit *transit) 
 {
     if (event && *event == HSM_EVENT_INIT) 
     {
         m_hitcount++;
+
         if (m_loop)
         {
             *transit = m_transit2;
             m_loop--;
         }
     }
+
+    return HSM_HANDLER_RETURN_IGNORED;
 }
 
 
 void setUp(void)
 {
+    Hsm hsm = { .handler = &m_handler };
+    Hsm hsm2 = { .handler = &m_handler, .active = &m_hsm };
+    HsmTransit transit = { .target = &m_hsm };
+    HsmTransit transit2 = { .target = &m_hsm2 };
+
+    memcpy( &m_hsm, &hsm, sizeof(hsm));
+    memcpy( &m_hsm2, &hsm2, sizeof(hsm2));
+    memcpy( &m_transit, &transit, sizeof(transit));
+    memcpy( &m_transit2, &transit2, sizeof(transit2));
     m_hitcount = 0;
     m_loop = 0;
 }
@@ -52,9 +65,9 @@ void test_Hsm_ProcessTransit_HappyPath(void)
 void test_Hsm_ProcessTransit_InitTransits(void)
 {
     m_loop = 1;
-    Hsm_DoTransit_ExpectAndReturn(&m_hsm,&m_transit,0);
-    Hsm_DoTransit_ExpectAndReturn(&m_hsm,&m_transit,0);
-    TEST_ASSERT_EQUAL(0,Hsm_ProcessTransit(&m_hsm,&m_transit));
+    Hsm_DoTransit_ExpectAndReturn(&m_hsm2,&m_transit,0);
+    Hsm_DoTransit_ExpectAndReturn(&m_hsm2,&m_transit2,0);
+    TEST_ASSERT_EQUAL(0,Hsm_ProcessTransit(&m_hsm2,&m_transit));
     TEST_ASSERT_EQUAL(2,m_hitcount);
 }
 
