@@ -1,3 +1,3 @@
 [submodule "vendor/qll"]
 	path = vendor/qll
-	url = ../qll
+	url = https://github.com/willr001/qll
