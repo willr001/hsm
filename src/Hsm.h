@@ -1,7 +1,12 @@
 #ifndef _HSM_H
 #define _HSM_H
 
+#include <stdlib.h>
+
 typedef struct Hsm Hsm;
+typedef struct HsmMachine HsmMachine;
+typedef struct HsmActiveLeaf HsmActiveLeaf;
+typedef struct HsmTransit HsmTransit;
 
 typedef enum HsmHandlerReturn {
     HSM_HANDLER_RETURN_IGNORED,
@@ -33,17 +38,25 @@ typedef enum HsmResult {
     HSM_RESULT_PROCESS_TRANSIT_ERROR_NULL_TRANSIT,
 } HsmResult;
 
-typedef struct HsmTransit {
-    Hsm *target;
-} HsmTransit;
-
 typedef HsmHandlerReturn (*HsmHandler)(Hsm *self, HsmEvent *event, HsmTransit *transit);
 
 struct Hsm {
     Hsm *parent;
     HsmHandler handler;
-    Hsm *active;
+    HsmActiveLeaf *active;
 };
 
+struct HsmMachine {
+    Hsm hsm;
+};
+
+struct HsmActiveLeaf {
+   Hsm hsm;
+};
+
+struct HsmTransit {
+    Hsm *target;
+};
+    
 #endif // _HSM_H
 

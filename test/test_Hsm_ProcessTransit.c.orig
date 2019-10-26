@@ -13,9 +13,9 @@ static Hsm m_hsm2;
 static HsmTransit m_transit;
 static HsmTransit m_transit2;
 
-static HsmHandlerReturn m_handler(Hsm *self, HsmEvent *event, HsmTransit *transit)
+static HsmHandlerReturn m_handler(Hsm *self, HsmEvent *event, HsmTransit *transit) 
 {
-    if (event && *event == HSM_EVENT_INIT)
+    if (event && *event == HSM_EVENT_INIT) 
     {
         m_hitcount++;
 
